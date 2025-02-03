@@ -3,7 +3,7 @@ import Movie from '../models/movieModel.js';
 // Add a new movie
 export const addMovie = async (req, res) => {
     try {
-        const { title, rating, releaseDate, genre, director, producer, trailerUrl,description } = req.body;
+        const { title, rating, releaseDate, genre, director, producer, trailerUrl,description,year } = req.body;
 
         // Access the file name from the multer upload result (assuming you're using multer)
         const poster = req.file ? req.file.filename : null; // Get the file name from multer (e.g., "image-1734001200679-2.jpg")
@@ -18,7 +18,8 @@ export const addMovie = async (req, res) => {
             producer,
             poster, // Store only the file name, not the full path
             trailerUrl,
-            description
+            description,
+            year
         });
 
         await movie.save();
@@ -36,6 +37,8 @@ export const getMovies = async (req, res) => {
     res.json(movies);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching movies', error });
+    console.log(error);
+
   }
 };
 
@@ -61,7 +64,7 @@ export const getMovieById = async (req, res) => {
 // Update a movie by ID
 export const updateMovie = async (req, res) => {
     const { id } = req.params; // Get movie ID from URL params
-    const { title, rating, releaseDate, genre, director, producer, trailerUrl,description } = req.body;
+    const { title, rating, releaseDate, genre, director, producer, trailerUrl,description,year } = req.body;
     
     // Get the poster file from the request (if any), else use the existing one
     const updatedPoster = req.file ? req.file.filename : req.body.poster;
@@ -79,7 +82,8 @@ export const updateMovie = async (req, res) => {
                 producer,
                 trailerUrl,
                 poster: updatedPoster,  // Update the poster if a new file is uploaded
-                description
+                description,
+                year
             },
             { new: true } // Return the updated movie document
         );
