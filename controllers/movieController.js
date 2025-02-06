@@ -16,7 +16,7 @@ export const addMovie = async (req, res) => {
             genre,
             director,
             producer,
-            poster, // Store only the file name, not the full path
+            poster, 
             trailerUrl,
             description,
             year
@@ -25,6 +25,7 @@ export const addMovie = async (req, res) => {
         await movie.save();
         res.status(201).json(movie);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Error adding movie' });
     }
 };
@@ -34,12 +35,13 @@ export const addMovie = async (req, res) => {
 export const getMovies = async (req, res) => {
   try {
     const movies = await Movie.find();
-    res.json(movies);
+    res.send(movies);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching movies', error });
     console.log(error);
 
   }
+
 };
 
 
