@@ -5,6 +5,7 @@ import movieRoutes from './routes/movieRoutes.js';
 import cors from 'cors';
 import path from 'path';
 import { getMovieById } from './controllers/movieController.js';
+import uploadFields from './middleware/multerMiddleware.js';
 
 dotenv.config(); // Load environment variables from .env file
 

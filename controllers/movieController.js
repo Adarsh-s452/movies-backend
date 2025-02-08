@@ -1,14 +1,62 @@
 import Movie from '../models/movieModel.js';
 
-// Add a new movie
+
+// // Add a new movie
+// export const addMovie = async (req, res) => {
+//     try {
+//         const { title, rating, releaseDate, genre, director, producer, trailerUrl,description,year } = req.body;
+
+//         // Access the file name from the multer upload result (assuming you're using multer)
+//         const poster = req.file ? req.file.filename : null; // Get the file name from multer (e.g., "image-1734001200679-2.jpg")
+
+//         // Create a new movie document with just the file name
+//         const movie = new Movie({
+//             title,
+//             rating,
+//             releaseDate,
+//             genre,
+//             director,
+//             producer,
+//             poster, 
+//             trailerUrl,
+//             description,
+//             year
+//         });
+
+//         await movie.save();
+//         res.status(201).json(movie);
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({ message: 'Error adding movie' });
+//     }
+// };
+
+// Add a new movie with cast information
 export const addMovie = async (req, res) => {
     try {
-        const { title, rating, releaseDate, genre, director, producer, trailerUrl,description,year } = req.body;
+        console.log("Request Body:", req.body);
+        console.log("Uploaded Files:", req.files); // Debugging file uploads
 
-        // Access the file name from the multer upload result (assuming you're using multer)
-        const poster = req.file ? req.file.filename : null; // Get the file name from multer (e.g., "image-1734001200679-2.jpg")
+        const { title, rating, releaseDate, genre, director, producer, trailerUrl, description, year, cast } = req.body;
 
-        // Create a new movie document with just the file name
+        // Ensure multer has processed files
+        if (!req.files || !req.files["poster"]) {
+            return res.status(400).json({ message: "Poster file is required" });
+        }
+
+        const poster = req.files["poster"] ? req.files["poster"][0].filename : null;
+
+        // Parse cast JSON and handle cast images
+        const castArray = cast ? JSON.parse(cast).map((actor, index) => ({
+            name: actor.name,
+            image: req.files["castImages"] ? req.files["castImages"][index]?.filename : null
+        })) : [];
+
+        // Validate required fields
+        if (!title || !rating || !releaseDate || !genre || !director || !producer || !poster || !trailerUrl || !description || !year || castArray.length === 0) {
+            return res.status(400).json({ message: "All fields are required, including cast details." });
+        }
+
         const movie = new Movie({
             title,
             rating,
@@ -16,17 +64,18 @@ export const addMovie = async (req, res) => {
             genre,
             director,
             producer,
-            poster, 
+            poster,
             trailerUrl,
             description,
-            year
+            year,
+            cast: castArray
         });
 
         await movie.save();
         res.status(201).json(movie);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Error adding movie' });
+        console.error("Error adding movie:", error);
+        res.status(500).json({ message: "Server Error" });
     }
 };
 
