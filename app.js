@@ -5,15 +5,13 @@ import movieRoutes from './routes/movieRoutes.js';
 import cors from 'cors';
 import path from 'path';
 import { getMovieById } from './controllers/movieController.js';
-import uploadFields from './middleware/multerMiddleware.js';
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config(); 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log('Failed to connect to MongoDB', err));
@@ -36,3 +34,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
