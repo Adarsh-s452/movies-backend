@@ -44,8 +44,6 @@ export const addMovie = async (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 };
-
-
 // Get all movies
 export const getMovies = async (req, res) => {
   try {
@@ -58,8 +56,6 @@ export const getMovies = async (req, res) => {
   }
 
 };
-
-
 // Get a movie by ID
 export const getMovieById = async (req, res) => {
     try {
@@ -72,8 +68,6 @@ export const getMovieById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching movie', error });
     }
 };
-
-
 // Update a movie by ID
 export const updateMovie = async (req, res) => {
     const { id } = req.params; 
@@ -108,9 +102,6 @@ export const updateMovie = async (req, res) => {
         res.status(500).send({ message: 'Internal server error' });
     }
 };
-
-
-
 // Delete a movie by ID
 export const deleteMovie = async (req, res) => {
   try {
